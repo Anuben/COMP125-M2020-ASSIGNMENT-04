@@ -16,6 +16,8 @@ File description:  Slot Machine
     let bet10Button: UIObjects.Button;
     let bet100Button: UIObjects.Button;
     let betMaxButton: UIObjects.Button;
+    let resetButton: UIObjects.Button;
+    let quitButton: UIObjects.Button;
     let jackPotLabel: UIObjects.Label;
     let creditLabel: UIObjects.Label;
     let winningsLabel: UIObjects.Label;
@@ -45,6 +47,8 @@ File description:  Slot Machine
         {id:"bet10Button", src:"./Assets/images/bet10Button.png"},
         {id:"bet100Button", src:"./Assets/images/bet100Button.png"},
         {id:"betMaxButton", src:"./Assets/images/betMaxButton.png"},
+        {id:"resetButton", src:"./Assets/images/resetButton.png"},
+        {id: "quitButton", src: "./Assets/images/quitButton.png"},
         {id:"blank", src:"./Assets/images/blank.gif"},
         {id:"cherry", src:"./Assets/images/cherry.gif"},
         {id:"grapes", src:"./Assets/images/grapes.gif"},
