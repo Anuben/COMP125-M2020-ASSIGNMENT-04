@@ -1,11 +1,3 @@
-/*File name: app.ts
-Author's name: Anuben Keshavala
-Student Id: 301120629
-Web site name: COMP-125-Assignment-04
-Web site URL: https://github.com/Anuben/COMP-125-Assignment-04
-File description:  Slot Machine
-*/
-
 (function(){
     // Function scoped Variables
     let stage: createjs.Stage;
@@ -28,6 +20,10 @@ File description:  Slot Machine
     let betLine: Core.GameObject;
 
     // symbol tallies
+    let playerMoney = 1000;
+    let winnings = 0;
+    let jackpot = 5000;
+    let playerBet = 0;
     let grapes = 0;
     let bananas = 0;
     let oranges = 0;
@@ -90,6 +86,56 @@ File description:  Slot Machine
         stage.update();
     }
 
+    function resetFruitTally() {
+        grapes = 0;
+        bananas = 0;
+        oranges = 0;
+        cherries = 0;
+        bars = 0;
+        bells = 0;
+        sevens = 0;
+        blanks = 0;
+    }
+    function resetAll() {
+        playerMoney = 1000;
+        creditLabel.text = "1000";
+        winnings = 0;
+        jackpot = 5000;
+        jackPotLabel.text = "5000";
+        winningsLabel.text = "0";
+        playerBet = 0;
+        
+    }
+    
+    function checkJackPot() {
+        /* compare two random values */
+        let jackPotTry = Math.floor(Math.random() * 51 + 1);
+        let jackPotWin = Math.floor(Math.random() * 51 + 1);
+        if (jackPotTry == jackPotWin) {
+            alert("You Won the $" + jackpot + " Jackpot!!");
+            playerMoney += jackpot;
+            jackpot = 5000;
+            creditLabel.text = String(playerMoney);
+
+        }
+    }
+    function showWinMessage() {
+        playerMoney += winnings;
+        winningsLabel.text = String(winnings);
+        resetFruitTally();
+        checkJackPot();
+        creditLabel.text = String(playerMoney);
+    }
+    
+    /* Utility function to show a loss message and reduce player money */
+    function showLossMessage() {
+        playerMoney -= playerBet;
+        resetFruitTally();
+        creditLabel.text = String(playerMoney);
+
+    }
+
+    //creditLabel.text = String(playerMoney);
     /* Utility function to check if a value falls within a range of bounds */
     function checkRange(value:number, lowerBounds:number, upperBounds:number):number | boolean {
         if (value >= lowerBounds && value <= upperBounds)
@@ -104,10 +150,10 @@ File description:  Slot Machine
     /* When this function is called it determines the betLine results.
     e.g. Bar - Orange - Banana */
     function Reels():string[] {
-        var betLine = [" ", " ", " "];
-        var outCome = [0, 0, 0];
+        let betLine = [" ", " ", " "];
+        let outCome = [0, 0, 0];
 
-        for (var spin = 0; spin < 3; spin++) {
+        for (let spin = 0; spin < 3; spin++) {
             outCome[spin] = Math.floor((Math.random() * 65) + 1);
             switch (outCome[spin]) {
                 case checkRange(outCome[spin], 1, 27):  // 41.5% probability
@@ -146,6 +192,68 @@ File description:  Slot Machine
         }
         return betLine;
     }
+    
+    function determineWinnings()
+    {
+    if (blanks == 0)
+    {
+        if (grapes == 3) {
+            winnings = playerBet * 10;
+        }
+        else if(bananas == 3) {
+            winnings = playerBet * 20;
+        }
+        else if (oranges == 3) {
+            winnings = playerBet * 30;
+        }
+        else if (cherries == 3) {
+            winnings = playerBet * 40;
+        }
+        else if (bars == 3) {
+            winnings = playerBet * 50;
+        }
+        else if (bells == 3) {
+            winnings = playerBet * 75;
+        }
+        else if (sevens == 3) {
+            winnings = playerBet * 100;
+        }
+        else if (grapes == 2) {
+            winnings = playerBet * 2;
+        }
+        else if (bananas == 2) {
+            winnings = playerBet * 2;
+        }
+        else if (oranges == 2) {
+            winnings = playerBet * 3;
+        }
+        else if (cherries == 2) {
+            winnings = playerBet * 4;
+        }
+        else if (bars == 2) {
+            winnings = playerBet * 5;
+        }
+        else if (bells == 2) {
+            winnings = playerBet * 10;
+        }
+        else if (sevens == 2) {
+            winnings = playerBet * 20;
+        }
+        else if (sevens == 1) {
+            winnings = playerBet * 5;
+        }
+        else {
+            winnings = playerBet * 1;
+        }
+        showWinMessage();
+    }
+    else
+    {
+        showLossMessage();
+    }
+    
+    }
+
 
     function buildInterface():void
     {
@@ -169,17 +277,23 @@ File description:  Slot Machine
         betMaxButton = new UIObjects.Button("betMaxButton", Config.Screen.CENTER_X + 67, Config.Screen.CENTER_Y + 176, true);
         stage.addChild(betMaxButton);
 
+        resetButton = new UIObjects.Button("resetButton", Config.Screen.CENTER_X - 250, Config.Screen.CENTER_Y +180, true);
+        stage.addChild(resetButton);
+
+        quitButton = new UIObjects.Button("quitButton", Config.Screen.CENTER_X + 250, Config.Screen.CENTER_Y + 180, true);
+        stage.addChild(quitButton);
+
         // Labels
         jackPotLabel = new UIObjects.Label("99999999", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X, Config.Screen.CENTER_Y - 175, true);
         stage.addChild(jackPotLabel);
 
-        creditLabel = new UIObjects.Label("99999999", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X - 94, Config.Screen.CENTER_Y + 108, true);
+        creditLabel = new UIObjects.Label("00001000", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X - 94, Config.Screen.CENTER_Y + 108, true);
         stage.addChild(creditLabel);
 
-        winningsLabel = new UIObjects.Label("99999999", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X + 94, Config.Screen.CENTER_Y + 108, true);
+        winningsLabel = new UIObjects.Label("00000000", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X + 94, Config.Screen.CENTER_Y + 108, true);
         stage.addChild(winningsLabel);
 
-        betLabel = new UIObjects.Label("9999", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X, Config.Screen.CENTER_Y + 108, true);
+        betLabel = new UIObjects.Label("000", "20px", "Consolas", "#FF0000", Config.Screen.CENTER_X, Config.Screen.CENTER_Y + 108, true);
         stage.addChild(betLabel);
 
         // Reel GameObjects
@@ -199,32 +313,90 @@ File description:  Slot Machine
 
     function interfaceLogic():void
     {
+        jackPotLabel.text = String(jackpot);
+        creditLabel.text = "1000";
+        winningsLabel.text = "0";
+       
+        bet1Button.on("click", ()=>{
+            playerBet = 1;
+            betLabel.text = String(playerBet);
+            
+        });
+
+        bet10Button.on("click", ()=>{
+            playerBet = 10;
+            betLabel.text = String(playerBet);
+            
+        });
+
+        bet100Button.on("click", ()=>{
+            playerBet = 100;
+            betLabel.text = String(playerBet);
+            
+        });
+
+        betMaxButton.on("click", ()=>{
+            playerBet = 500;
+            betLabel.text = String(playerBet);
+           
+        });
+
+        resetButton.on("click", () => {
+            
+            resetInterface();
+        });
+
+        quitButton.on("click", () => {
+           
+            alert("Thank You For Playing the Game!");           
+        });    
+        
         spinButton.on("click", ()=>{
 
-            // reel test
-            let reels = Reels();
+            if (playerMoney == 0)
+            {
+                if (confirm("You ran out of Money! \nDo you want to play again?")) {
+                    resetAll();
+                }
+            }
+            else if (playerBet > playerMoney) 
+            {
+                alert("You don't have enough Money to place that bet.");
+            }
+            else if (playerBet <= playerMoney)
+            
+            {
+                let reels = Reels();
 
             // example of how to replace the images in the reels
             leftReel.image = assets.getResult(reels[0]) as HTMLImageElement;
             middleReel.image = assets.getResult(reels[1]) as HTMLImageElement;
             rightReel.image = assets.getResult(reels[2]) as HTMLImageElement;
-        });
 
-        bet1Button.on("click", ()=>{
-            console.log("bet1Button Button Clicked");
-        });
+            determineWinnings();
 
-        bet10Button.on("click", ()=>{
-            console.log("bet10Button Button Clicked");
-        });
+            }
+                
+            // reel test
 
-        bet100Button.on("click", ()=>{
-            console.log("bet100Button Button Clicked");
-        });
+        });     
+    }
+    function resetInterface():void
+    {
+        jackpot = 5000;
+        playerMoney = 1000;
+        playerBet = 0;
+        winnings = 0;        
+        
+        jackPotLabel.setText(jackpot.toString());
+        creditLabel.setText(playerMoney.toString());
+        betLabel.setText(playerBet.toString());
+        winningsLabel.setText(winnings.toString());
 
-        betMaxButton.on("click", ()=>{
-            console.log("betMaxButton Button Clicked");
-        });
+       
+        leftReel.image = assets.getResult("blank") as HTMLImageElement;
+        middleReel.image = assets.getResult("blank") as HTMLImageElement;
+        rightReel.image = assets.getResult("blank") as HTMLImageElement;
     }
 
     // app logic goes here
@@ -233,6 +405,8 @@ File description:  Slot Machine
         buildInterface();
 
         interfaceLogic();
+
+        resetInterface();
        
     }
 
