@@ -1,3 +1,10 @@
+/*File name: app.ts
+Author's name: Anuben Keshavala
+Student Id: 301120629
+Web site name: COMP125-M2020-Assignment-04
+Web site URL: https://github.com/Anuben/COMP125-M2020-ASSIGNMENT-04
+File description: Slot Machine
+*/
 (function () {
     // Function scoped Variables
     let stage;
