@@ -328,34 +328,38 @@ File description: Slot Machine
         bet1Button.on("click", ()=>{
             playerBet = 1;
             betLabel.text = String(playerBet);
+            console.log("bet1Button Button Clicked");
             
         });
 
         bet10Button.on("click", ()=>{
             playerBet = 10;
             betLabel.text = String(playerBet);
+            console.log("bet10Button Button Clicked");
             
         });
 
         bet100Button.on("click", ()=>{
             playerBet = 100;
             betLabel.text = String(playerBet);
+            console.log("bet100Button Button Clicked");
             
         });
 
         betMaxButton.on("click", ()=>{
             playerBet = 500;
             betLabel.text = String(playerBet);
+            console.log("betMaxButton Button Clicked");
            
         });
 
         resetButton.on("click", () => {
-            
+            console.log("Reset Button  Clicked");
             resetInterface();
         });
 
         quitButton.on("click", () => {
-           
+            console.log("quitButton Button Clicked");
             alert("Thank You For Playing the Game!");           
         });    
         
